@@ -6,9 +6,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.homer.ahmed.memorygame.R;
 import com.homer.ahmed.memorygame.data.Card;
@@ -39,6 +39,12 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
+        // Set up toolbar
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_action_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up presenter
         presenter = new BoardPresenter();
