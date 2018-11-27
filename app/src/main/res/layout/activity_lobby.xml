@@ -7,14 +7,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/title_padding">
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title"
-            android:gravity="center_horizontal"/>
+            android:textSize="@dimen/title_size"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/title_padding"/>
+
+        <ListView
+            android:id="@+id/options_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title">
+
+        </ListView>
 
     </RelativeLayout>
 
