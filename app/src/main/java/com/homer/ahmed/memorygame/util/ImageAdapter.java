@@ -1,6 +1,7 @@
 package com.homer.ahmed.memorygame.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,11 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setImageResource(imageResource);
         } else {
             imageView.setImageResource(CARD_BACK);
+        }
+
+        if (card.isMatched()) {
+            imageView.setEnabled(false);
+            imageView.setColorFilter(Color.argb(120, 0, 0, 0));
         }
         return imageView;
     }

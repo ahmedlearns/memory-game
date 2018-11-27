@@ -24,5 +24,7 @@ public interface BoardContract {
     interface View {
 
         void populateCardGrid(List<Card> cards, int width);
+
+        void updateAfterDelay(List<Card> cards);
     }
 }

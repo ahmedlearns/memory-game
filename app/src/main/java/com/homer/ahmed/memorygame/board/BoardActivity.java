@@ -2,6 +2,8 @@ package com.homer.ahmed.memorygame.board;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,5 +73,13 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         adapter.setCards(cards);
         cardsGrid.setNumColumns(width);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateAfterDelay(List<Card> cards) {
+        adapter.setCards(cards);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            adapter.notifyDataSetChanged();
+        }, 0);
     }
 }

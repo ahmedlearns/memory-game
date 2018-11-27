@@ -46,4 +46,8 @@ public class Card {
     public void setType(Type type) {
         this.type = type;
     }
+
+    public boolean matches(Card card) {
+        return type.equals(card.getType()) && flipped == card.isFlipped();
+    }
 }
