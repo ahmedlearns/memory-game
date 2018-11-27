@@ -25,7 +25,6 @@ public class BoardPresenter implements BoardContract.Actions {
     @Override
     public void populateView() {
         // Randomly populate board with cards
-
         int numberOfCards = gridOption.getLength() * gridOption.getWidth();
         for (int i = 0; i < numberOfCards; i++) {
             Card.Type type = Card.Type.randomLetter();
@@ -33,6 +32,13 @@ public class BoardPresenter implements BoardContract.Actions {
             cards.add(card);
         }
 
+        view.populateCardGrid(cards, gridOption.getWidth());
+    }
+
+    @Override
+    public void onCardClicked(int position) {
+        Card card = cards.get(position);
+        card.setFlipped(!card.isFlipped());
 
         view.populateCardGrid(cards, gridOption.getWidth());
     }

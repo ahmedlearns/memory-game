@@ -8,10 +8,17 @@ import java.util.List;
 public interface BoardContract {
 
     interface Actions {
-
+        /**
+         * Method to give the presenter a reference to its view
+         * @param view View to be given to presenter
+         */
         void setView(BoardContract.View view);
+
         void setGridOption(GridOption gridOption);
+
         void populateView();
+
+        void onCardClicked(int position);
     }
 
     interface View {

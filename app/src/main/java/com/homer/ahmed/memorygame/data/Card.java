@@ -16,6 +16,7 @@ public class Card {
     }
 
     private boolean matched = false;
+    private boolean flipped = false;
     private Type type;
 
     public Card(Type type) {
@@ -28,6 +29,14 @@ public class Card {
 
     public void setMatched(boolean matched) {
         this.matched = matched;
+    }
+
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
     }
 
     public Type getType() {

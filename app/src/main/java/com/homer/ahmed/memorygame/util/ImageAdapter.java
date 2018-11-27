@@ -14,12 +14,20 @@ import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private static final String TAG = ImageAdapter.class.getSimpleName();
+    private static final Integer CARD_BACK = R.drawable.card_back;
+    private static final int CARD_LENGTH = 422;
+    private static final int CARD_WIDTH = 294;
+    private static final double CARD_SCALE = 0.65;
+
 
     private Context context;
     private List<Card> cards;
 
-    public ImageAdapter(Context context, List<Card> cards) {
+    public ImageAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setCards(List<Card> cards) {
         this.cards = cards;
     }
 
@@ -37,24 +45,36 @@ public class ImageAdapter extends BaseAdapter {
     }
 
 
-    // create a new ImageView for each item referenced by the Adapter
+    // Create an ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        // Cards needs to be set before generating images for each card.
+        if (null == cards) {
+            Log.e(TAG, "getView: Cards not set");
+            return convertView;
+        }
+
         ImageView imageView;
         Card card = cards.get(position);
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
+            int width = (int) (CARD_WIDTH * CARD_SCALE);
+            int length = (int) (CARD_LENGTH * CARD_SCALE);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(width, length));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            int padding = 10;
-            imageView.setPadding(padding, padding, padding, padding);
+            int padding = 6;
+            imageView.setPadding(padding, padding, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
 
         Integer imageResource = getImageResource(card.getType());
-        imageView.setImageResource(imageResource);
+        if (card.isFlipped()) {
+            imageView.setImageResource(imageResource);
+        } else {
+            imageView.setImageResource(CARD_BACK);
+        }
         return imageView;
     }
 

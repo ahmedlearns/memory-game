@@ -38,13 +38,15 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        cardsGrid = findViewById(R.id.cards_grid);
-        cardsGrid.setOnItemClickListener((parent, view, position, id) ->
-                Toast.makeText(getBaseContext(), "Clicking on item " + position, Toast.LENGTH_LONG).show());
-
         // Set up presenter
         presenter = new BoardPresenter();
         presenter.setView(this);
+
+        cardsGrid = findViewById(R.id.cards_grid);
+        cardsGrid.setOnItemClickListener((parent, view, position, id) -> presenter.onCardClicked(position));
+
+        adapter = new ImageAdapter(getBaseContext());
+        cardsGrid.setAdapter(adapter);
 
         // Check for necessary extras
         if (!getIntent().hasExtra(OPTION)) {
@@ -66,8 +68,8 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
 
     @Override
     public void populateCardGrid(List<Card> cards, int width) {
-        adapter = new ImageAdapter(getBaseContext(), cards);
+        adapter.setCards(cards);
         cardsGrid.setNumColumns(width);
-        cardsGrid.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }
