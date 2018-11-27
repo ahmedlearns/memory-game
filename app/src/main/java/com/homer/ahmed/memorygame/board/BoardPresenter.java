@@ -1,11 +1,16 @@
 package com.homer.ahmed.memorygame.board;
 
+import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardPresenter implements BoardContract.Actions {
 
-    BoardContract.View view;
-    GridOption gridOption;
+    private BoardContract.View view;
+    private GridOption gridOption;
+    private List<Card> cards = new ArrayList<>();
 
     @Override
     public void setView(BoardContract.View view) {
@@ -19,6 +24,16 @@ public class BoardPresenter implements BoardContract.Actions {
 
     @Override
     public void populateView() {
-        view.updateOption(gridOption.getName());
+        // Randomly populate board with cards
+
+        int numberOfCards = gridOption.getLength() * gridOption.getWidth();
+        for (int i = 0; i < numberOfCards; i++) {
+            Card.Type type = Card.Type.randomLetter();
+            Card card = new Card(type);
+            cards.add(card);
+        }
+
+
+        view.populateCardGrid(cards, gridOption.getWidth());
     }
 }

@@ -5,10 +5,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import com.homer.ahmed.memorygame.R;
+import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
+import com.homer.ahmed.memorygame.util.ImageAdapter;
+
+import java.util.List;
 
 public class BoardActivity extends AppCompatActivity implements BoardContract.View {
 
@@ -17,7 +22,8 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
 
     private BoardContract.Actions presenter;
 
-    private TextView testing;
+    private GridView cardsGrid;
+    private ImageAdapter adapter;
 
     public static Intent createIntent(Context context, GridOption gridOption) {
         Intent intent = new Intent(context, BoardActivity.class);
@@ -32,7 +38,9 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        testing = findViewById(R.id.testing);
+        cardsGrid = findViewById(R.id.cards_grid);
+        cardsGrid.setOnItemClickListener((parent, view, position, id) ->
+                Toast.makeText(getBaseContext(), "Clicking on item " + position, Toast.LENGTH_LONG).show());
 
         // Set up presenter
         presenter = new BoardPresenter();
@@ -57,7 +65,9 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
     }
 
     @Override
-    public void updateOption(String name) {
-        testing.setText(name);
+    public void populateCardGrid(List<Card> cards, int width) {
+        adapter = new ImageAdapter(getBaseContext(), cards);
+        cardsGrid.setNumColumns(width);
+        cardsGrid.setAdapter(adapter);
     }
 }

@@ -1,6 +1,9 @@
 package com.homer.ahmed.memorygame.board;
 
+import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
+
+import java.util.List;
 
 public interface BoardContract {
 
@@ -13,6 +16,6 @@ public interface BoardContract {
 
     interface View {
 
-        void updateOption(String name);
+        void populateCardGrid(List<Card> cards, int width);
     }
 }
