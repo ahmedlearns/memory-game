@@ -5,8 +5,8 @@ import android.util.Log;
 import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
 
-import java.nio.channels.FileLockInterruptionException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,12 +34,19 @@ public class BoardPresenter implements BoardContract.Actions {
     @Override
     public void populateView() {
         // Randomly populate board with cards
+        if (!cards.isEmpty()) {
+            Log.d(TAG, "populateView: cards is already populated");
+            return;
+        }
+
         int numberOfCards = gridOption.getLength() * gridOption.getWidth();
         for (int i = 0; i < numberOfCards; i++) {
             Card.Type type = Card.Type.randomLetter();
-            Card card = new Card(type);
-            cards.add(card);
+            cards.add(new Card(type));
+            cards.add(new Card(type));
+            i++;
         }
+        Collections.shuffle(cards);
 
         view.populateCardGrid(cards, gridOption.getWidth());
     }
