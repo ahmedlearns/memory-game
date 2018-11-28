@@ -19,24 +19,55 @@ public class LobbyActivity extends AppCompatActivity {
     private ListView optionsListView;
     private ArrayList<GridOption> gridOptions = new ArrayList<>();
 
+    /**
+     * Possible features:
+     *      - End states (success or failure screens)
+     *      - Various game modes (e.g. time based, never-ending puzzle, etc)
+     *      - User preferences (e.g. sound, uniqueness of cards/difficulty)
+     *      - Scoring and leaderboards
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
+        generateGridOptions();
+        initializeViews();
+        initializeAdapter();
+    }
+
+    //
+    // Helper Methods
+    //
+    
+    /**
+     * Generate grid options based on requirements.
+     * 
+     * Possible feature: take an M x N input to generate a custom grid.
+     */
+    private void generateGridOptions() {
         gridOptions.add(new GridOption("3x4"));
         gridOptions.add(new GridOption("5x2"));
         gridOptions.add(new GridOption("4x4"));
         gridOptions.add(new GridOption("4x5"));
+    }
 
+    /**
+     * Bind views from the layout.
+     */
+    private void initializeViews() {
         optionsListView = findViewById(R.id.options_list);
+    }
+
+    /**
+     * Create new adapter and set click event behavior.
+     */
+    private void initializeAdapter() {
         OptionsAdapter adapter = new OptionsAdapter(this, R.layout.item_option, gridOptions);
         adapter.setGridOptionEventListener(option -> {
             Intent intent = BoardActivity.createIntent(getApplicationContext(), option);
             startActivity(intent);
         });
         optionsListView.setAdapter(adapter);
-
-        Log.d(TAG, "onCreate: gridOptions: " + gridOptions);
     }
 }

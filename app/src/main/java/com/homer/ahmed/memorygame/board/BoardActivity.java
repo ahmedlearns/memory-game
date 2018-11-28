@@ -40,37 +40,15 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        // Set up toolbar
-        Toolbar toolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_action_back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Set up presenter
-        presenter = new BoardPresenter();
-        presenter.setView(this);
-
-        cardsGrid = findViewById(R.id.cards_grid);
-        cardsGrid.setOnItemClickListener((parent, view, position, id) -> presenter.onCardClicked(position));
-
-        adapter = new ImageAdapter(getBaseContext());
-        cardsGrid.setAdapter(adapter);
-
-        // Check for necessary extras
-        if (!getIntent().hasExtra(OPTION)) {
-            Log.e(TAG, "EXTRA_EPISODE_ID does not exist.");
-            finishActivity(-1);
-            return;
-        }
-
-        GridOption gridOption = (GridOption) getIntent().getBundleExtra(OPTION).get(OPTION);
-        presenter.setGridOption(gridOption);
+        initializeToolbar();
+        initializePresenter();
+        initializeViews();
+        loadGridOption();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         presenter.populateView();
     }
 
@@ -84,8 +62,62 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
     @Override
     public void updateAfterDelay(List<Card> cards) {
         adapter.setCards(cards);
+        // Adapter must be refreshed using a Handler due to being called from a separate thread.
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             adapter.notifyDataSetChanged();
         }, 0);
+    }
+
+    //
+    // Helper Methods
+    //
+
+    /**
+     * Initialize custom toolbar with provided back image.
+     * Enable image to act as the Android "Up" function
+     *
+     * Possible features/menu options:
+     *      - A "pause" state if a timer was running, with additional options (e.g. reset, back to home screen, sound options, etc)
+     *      - Reset option
+     */
+    private void initializeToolbar() {
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_action_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * Create a presenter to house business logic. Set the view to interact with it.
+     */
+    private void initializePresenter() {
+        presenter = new BoardPresenter();
+        presenter.setView(this);
+    }
+
+    /**
+     * Set up grid of cards and event listener for each item.
+     */
+    private void initializeViews() {
+        cardsGrid = findViewById(R.id.cards_grid);
+        cardsGrid.setOnItemClickListener((parent, view, position, id) -> presenter.onCardClicked(position));
+
+        adapter = new ImageAdapter(getBaseContext());
+        cardsGrid.setAdapter(adapter);
+    }
+
+    /**
+     * Confirm chosen grid option has been passed from previous screen.
+     */
+    private void loadGridOption() {
+        // Check for necessary extras
+        if (!getIntent().hasExtra(OPTION)) {
+            Log.e(TAG, "OPTION does not exist.");
+            finishActivity(-1);
+            return;
+        }
+
+        GridOption gridOption = (GridOption) getIntent().getBundleExtra(OPTION).get(OPTION);
+        presenter.setGridOption(gridOption);
     }
 }

@@ -45,7 +45,6 @@ public class ImageAdapter extends BaseAdapter {
         return cards.size();
     }
 
-
     // Create an ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
