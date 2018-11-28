@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 public class BoardPresenterTest {
 
     private BoardPresenter presenter;
-    private GridOption gridOption = new GridOption("3x4");
+    private GridOption gridOption = new GridOption("4x5");
     private BoardContract.View view;
 
     @Before
@@ -53,6 +53,18 @@ public class BoardPresenterTest {
 
     @Test
     public void testCardsHasTwoOfEveryTypeOfCardUsed() {
+        // For every card, count number of cards of that type,
+        // make sure number is greater than 1 and even
+        presenter.populateView();
+        List<Card> cards = presenter.getCards();
+        cards.forEach(card -> {
+            long numberOfCardsOfType = cards.stream().filter(c -> c.matches(card)).count();
+            assertTrue(numberOfCardsOfType > 1 && numberOfCardsOfType % 2 == 0);
+        });
+    }
+
+    @Test
+    public void testCardsHasAtMostOneOfEveryTypeOfAnimalBeforeRepeating() {
 
     }
 
