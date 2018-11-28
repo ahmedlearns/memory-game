@@ -1,12 +1,17 @@
 package com.homer.ahmed.memorygame.util;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.homer.ahmed.memorygame.R;
@@ -30,8 +35,11 @@ public class OptionsAdapter extends ArrayAdapter<GridOption> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_option, parent, false);
         }
 
-        TextView title = convertView.findViewById(R.id.option_title);
+        Button title = convertView.findViewById(R.id.option_title);
+        addButtonEffect(title);
         title.setText(gridOption.getName());
+        Typeface font = ResourcesCompat.getFont(getContext(), R.font.sushi_omelette);
+        title.setTypeface(font);
 
         // pass events to the parent
         title.setOnClickListener(view -> this.gridOptionEventListener.onGridOptionClicked(gridOption));
@@ -50,5 +58,26 @@ public class OptionsAdapter extends ArrayAdapter<GridOption> {
 
     public void setGridOptionEventListener(GridOptionEventListener listener) {
         this.gridOptionEventListener = listener;
+    }
+
+    //
+    // UI Helper Methods
+    //
+    private static void addButtonEffect(View button){
+        button.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    v.getBackground().setColorFilter(0xe0f47521,PorterDuff.Mode.SRC_ATOP);
+                    v.invalidate();
+                    break;
+                }
+                case MotionEvent.ACTION_UP: {
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    break;
+                }
+            }
+            return false;
+        });
     }
 }

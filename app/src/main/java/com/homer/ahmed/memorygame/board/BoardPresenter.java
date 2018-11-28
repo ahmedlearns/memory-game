@@ -7,19 +7,22 @@ import com.homer.ahmed.memorygame.data.GridOption;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class BoardPresenter implements BoardContract.Actions {
 
     private static final String TAG = BoardPresenter.class.getSimpleName();
-    private static final int DELAY = 1000;
+    public static final long DELAY = 1000;
 
     private BoardContract.View view;
     private GridOption gridOption;
     private List<Card> cards = new ArrayList<>();
     private Card flippedCard;
+    private Timer timer = new Timer();
 
     @Override
     public void setView(BoardContract.View view) {
@@ -33,21 +36,12 @@ public class BoardPresenter implements BoardContract.Actions {
 
     @Override
     public void populateView() {
-        // Randomly populate board with cards
         if (!cards.isEmpty()) {
             Log.d(TAG, "populateView: cards is already populated");
             return;
         }
 
-        int numberOfCards = gridOption.getLength() * gridOption.getWidth();
-        for (int i = 0; i < numberOfCards; i++) {
-            Card.Type type = Card.Type.randomLetter();
-            cards.add(new Card(type));
-            cards.add(new Card(type));
-            i++;
-        }
-        Collections.shuffle(cards);
-
+        generateCards();
         view.populateCardGrid(cards, gridOption.getWidth());
     }
 
@@ -55,23 +49,18 @@ public class BoardPresenter implements BoardContract.Actions {
     public void onCardClicked(int position) {
         Card card = cards.get(position);
 
-        if (card.isFlipped()) {
-            Log.d(TAG, "onCardClicked: Cards are not actionable while flipped");
+        if (card.isFlipped() || card.isMatched()) {
+            Log.d(TAG, "onCardClicked: Cards are not actionable while flipped or matched");
             return;
         }
 
-        long numberOfFlippedCardInPlay = cards.stream().filter(c -> c.isFlipped() && !c.isMatched()).count();
-        if (numberOfFlippedCardInPlay == 2) {
+        long numberOfFlippedCardsInPlay = cards.stream().filter(c -> c.isFlipped() && !c.isMatched()).count();
+        if (numberOfFlippedCardsInPlay >= 2) {
             Log.d(TAG, "onCardClicked: Wait until cards are flipped back to continue.");
             return;
         }
 
         card.setFlipped(true);
-
-        if (card.equals(flippedCard) || card.isMatched()) {
-            Log.d(TAG, "onCardClicked: Pick another card to continue.");
-            return;
-        }
 
         // If there is one card flipped, set their flipped state, return
         if (null == flippedCard) {
@@ -91,7 +80,7 @@ public class BoardPresenter implements BoardContract.Actions {
             // If they do not match, wait 1 second before updating.
             view.populateCardGrid(cards, gridOption.getWidth());
 
-            new Timer().schedule(new TimerTask() {
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     card.setFlipped(false);
@@ -101,5 +90,55 @@ public class BoardPresenter implements BoardContract.Actions {
                 }
             }, DELAY);
         }
+    }
+
+    //
+    // Helper Methods
+    //
+
+    /**
+     * Generate as even a distribution of card types as possible
+     * by getting a random card of each type until there are no types left,
+     * then repeat.
+     */
+    public void generateCards() {
+        List<Card.Type> typesLeft = new ArrayList<>(EnumSet.allOf(Card.Type.class));
+        int numberOfCards = gridOption.getLength() * gridOption.getWidth();
+        Random random = new Random();
+        for (int i = 0; i < numberOfCards; i++) {
+            if (typesLeft.isEmpty()) {
+                typesLeft = new ArrayList<>(EnumSet.allOf(Card.Type.class));
+            }
+            Card.Type randomType = typesLeft.get(random.nextInt(typesLeft.size()));
+            cards.add(new Card(randomType));
+            cards.add(new Card(randomType));
+            typesLeft.remove(randomType);
+            i++;
+        }
+        Collections.shuffle(cards);
+    }
+
+    //
+    // Methods for unit tests
+    //
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    public Card getFlippedCard() {
+        return flippedCard;
+    }
+
+    public void setFlippedCard(Card flippedCard) {
+        this.flippedCard = flippedCard;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
     }
 }
