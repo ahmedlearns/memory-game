@@ -1,10 +1,13 @@
 package com.homer.ahmed.memorygame;
 
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.homer.ahmed.memorygame.board.BoardActivity;
 import com.homer.ahmed.memorygame.data.GridOption;
@@ -18,11 +21,16 @@ public class LobbyActivity extends AppCompatActivity {
 
     private ListView optionsListView;
     private ArrayList<GridOption> gridOptions = new ArrayList<>();
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+
+        title = findViewById(R.id.title);
+        Typeface font = ResourcesCompat.getFont(getApplicationContext(), R.font.sushi_omelette);
+        title.setTypeface(font);
 
         gridOptions.add(new GridOption("3x4"));
         gridOptions.add(new GridOption("5x2"));
