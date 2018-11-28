@@ -97,6 +97,8 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
 
     /**
      * Set up grid of cards and event listener for each item.
+     *
+     * Possible feature: add card transition animations.
      */
     private void initializeViews() {
         cardsGrid = findViewById(R.id.cards_grid);

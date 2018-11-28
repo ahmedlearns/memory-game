@@ -97,6 +97,15 @@ public class ImageAdapter extends BaseAdapter {
     // Helper Methods
     //
 
+    /**
+     * Return drawable resource based on card type.
+     *
+     * In the future, this and the Card Type model
+     * can be abstracted away behind an API in order to allow for additional card types.
+     *
+     * @param type Type of Card
+     * @return Drawable resource identifier
+     */
     private Integer getImageResource(Card.Type type) {
         switch (type) {
             case BAT:
