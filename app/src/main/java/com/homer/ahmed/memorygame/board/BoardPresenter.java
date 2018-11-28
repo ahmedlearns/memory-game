@@ -6,8 +6,13 @@ import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,11 +44,20 @@ public class BoardPresenter implements BoardContract.Actions {
             return;
         }
 
+        // The goal is to get as even a distribution of card types as possible
+        // by getting a random card of each type until there are no types left,
+        // then repeat.
+        List<Card.Type> typesLeft = new ArrayList<>(EnumSet.allOf(Card.Type.class));
         int numberOfCards = gridOption.getLength() * gridOption.getWidth();
+        Random random = new Random();
         for (int i = 0; i < numberOfCards; i++) {
-            Card.Type type = Card.Type.randomLetter();
-            cards.add(new Card(type));
-            cards.add(new Card(type));
+            if (typesLeft.isEmpty()) {
+                typesLeft = new ArrayList<>(EnumSet.allOf(Card.Type.class));
+            }
+            Card.Type randomType = typesLeft.get(random.nextInt(typesLeft.size()));
+            cards.add(new Card(randomType));
+            cards.add(new Card(randomType));
+            typesLeft.remove(randomType);
             i++;
         }
         Collections.shuffle(cards);

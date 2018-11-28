@@ -1,18 +1,9 @@
 package com.homer.ahmed.memorygame.data;
 
-import java.util.Random;
-
 public class Card {
 
     public enum Type {
         COW, HEN, HORSE, PIG, BAT, CAT, GHOST_DOG, SPIDER;
-
-        private static final Random RANDOM = new Random();
-
-        public static Type randomLetter()  {
-            Type[] values = values();
-            return values[RANDOM.nextInt(values.length)];
-        }
     }
 
     private boolean matched = false;

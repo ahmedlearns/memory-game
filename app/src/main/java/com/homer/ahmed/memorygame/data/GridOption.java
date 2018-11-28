@@ -11,8 +11,8 @@ public class GridOption implements Parcelable {
 
     public GridOption(String name) {
         this.name = name;
-        this.length = Integer.parseInt(name.substring(2,3));
-        this.width = Integer.parseInt(name.substring(0,1));
+        this.length = Integer.parseInt(name.split("x")[1]);
+        this.width = Integer.parseInt(name.split("x")[0]);
     }
 
     public String getName() {
