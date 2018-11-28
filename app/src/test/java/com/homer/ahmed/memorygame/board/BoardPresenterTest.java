@@ -6,7 +6,6 @@ import com.homer.ahmed.memorygame.data.GridOption;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,13 +104,24 @@ public class BoardPresenterTest {
     }
 
     @Test
-    public void testThatRepeatedCardsAreDistributedEvenly() {
-
-    }
-
-    @Test
     public void testCardsIsShuffled() {
+        // increase number of cards to decrease likelihood of random perfect order
+        presenter.setGridOption(new GridOption("12x15"));
+        presenter.populateView();
+        List<Card> cards = presenter.getCards();
 
+        Card.Type currentlyCheckingCardType = Card.Type.BAT;
+        int numberOfRepeats = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            if (i % 2 == 0) {
+                currentlyCheckingCardType = cards.get(i).getType();
+            } else if (cards.get(i).getType().equals(currentlyCheckingCardType)){
+                numberOfRepeats++;
+            }
+        }
+
+        int numberOfRepeatsIfUnevenDistribution = cards.size() / 2;
+        assertTrue(numberOfRepeats < numberOfRepeatsIfUnevenDistribution);
     }
 
     @Test
