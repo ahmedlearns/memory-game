@@ -25,6 +25,7 @@ public class BoardPresenterTest {
     private BoardPresenter presenter;
     private GridOption gridOption = new GridOption("4x5");
     private BoardContract.View view;
+    private int position = 10;
 
     @Before
     public void setUp() {
@@ -63,7 +64,7 @@ public class BoardPresenterTest {
     public void testCardsHasTwoOfEveryTypeOfCardUsed() {
         // For every card, count number of cards of that type,
         // make sure number is greater than 1 and even
-        presenter.populateView();
+        presenter.generateCards();
         List<Card> cards = presenter.getCards();
         cards.forEach(card -> {
             long numberOfCardsOfType = cards.stream().filter(c -> c.matches(card)).count();
@@ -74,7 +75,7 @@ public class BoardPresenterTest {
     @Test
     public void testCardsHasAtMostOneOfEveryTypeOfAnimalBeforeRepeating() {
         presenter.setGridOption(new GridOption("12x15"));
-        presenter.populateView();
+        presenter.generateCards();
         List<Card> cards = presenter.getCards();
 
         // Map to keep count of each card type
@@ -107,7 +108,7 @@ public class BoardPresenterTest {
     public void testCardsIsShuffled() {
         // increase number of cards to decrease likelihood of random perfect order
         presenter.setGridOption(new GridOption("12x15"));
-        presenter.populateView();
+        presenter.generateCards();
         List<Card> cards = presenter.getCards();
 
         Card.Type currentlyCheckingCardType = Card.Type.BAT;
@@ -141,6 +142,13 @@ public class BoardPresenterTest {
 
     @Test
     public void testCardsShouldNotBeActionableWhileFlipped() {
+        presenter.generateCards();
+        List<Card> cards = presenter.getCards();
+        cards.get(position).setFlipped(true);
+        presenter.setCards(cards);
 
+        presenter.onCardClicked(position);
+
+        verify(view, times(0)).populateCardGrid(anyList(), anyInt());
     }
 }
