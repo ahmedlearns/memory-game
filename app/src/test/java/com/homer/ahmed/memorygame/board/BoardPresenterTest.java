@@ -3,12 +3,16 @@ package com.homer.ahmed.memorygame.board;
 import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -29,6 +33,11 @@ public class BoardPresenterTest {
         presenter = new BoardPresenter();
         presenter.setView(view);
         presenter.setGridOption(gridOption);
+    }
+
+    @After
+    public void tearDown() {
+        presenter = null;
     }
 
     @Test
@@ -65,6 +74,38 @@ public class BoardPresenterTest {
 
     @Test
     public void testCardsHasAtMostOneOfEveryTypeOfAnimalBeforeRepeating() {
+        presenter.setGridOption(new GridOption("12x15"));
+        presenter.populateView();
+        List<Card> cards = presenter.getCards();
+
+        // Map to keep count of each card type
+        Map<Card.Type, Integer> cardTypeMap = new HashMap<>();
+        cards.forEach(card -> cardTypeMap.put(card.getType(),
+                cardTypeMap.containsKey(card.getType()) ? cardTypeMap.get(card.getType()) + 1 : 1));
+
+        // Formula example: 4x5 grid yields 20 cards;
+        //  There are 8 types -> 16 cards with unique matches,
+        //  Leaving 4 extra cards -> 2 types can repeat ->
+        //      no more than 2 types should have >2 cards
+        List<Card.Type> types = Arrays.asList(Card.Type.values());
+        int numberOfTypesThatCanRepeat = (cards.size() - (types.size() * 2)) / 2;
+        int numberOfRepeatingTypes = 0;
+
+        for(Card.Type type : types) {
+            if (cardTypeMap.containsKey(type) && cardTypeMap.get(type) > 2) {
+                numberOfRepeatingTypes++;
+            }
+        }
+
+        if (numberOfTypesThatCanRepeat > 0) {
+            assertTrue(numberOfRepeatingTypes <= numberOfTypesThatCanRepeat);
+        } else {
+            assertEquals(0, numberOfRepeatingTypes);
+        }
+    }
+
+    @Test
+    public void testThatRepeatedCardsAreDistributedEvenly() {
 
     }
 
