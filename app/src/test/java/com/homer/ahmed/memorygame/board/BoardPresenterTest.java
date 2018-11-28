@@ -12,10 +12,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -127,17 +132,62 @@ public class BoardPresenterTest {
 
     @Test
     public void testOneCardAppearsUntilAnotherCardIsClicked() {
+        presenter.generateCards();
+        presenter.setFlippedCard(null);
 
+        presenter.onCardClicked(position);
+
+        assertEquals(presenter.getCards().get(position), presenter.getFlippedCard());
+        verify(view, times(1)).populateCardGrid(anyList(), anyInt());
+    }
+
+    @Test
+    public void testThereShouldBeAtMostTwoFlippedCards() {
+        presenter.generateCards();
+        List<Card> cards = presenter.getCards();
+        Random random = new Random();
+        int numberOfFlippedCards = 3;
+        for (int i = 0; i < numberOfFlippedCards; i++) {
+            cards.get(random.nextInt(cards.size())).setFlipped(true);
+        }
+
+        presenter.onCardClicked(position);
+
+        verify(view, times(0)).populateCardGrid(anyList(), anyInt());
     }
 
     @Test
     public void testTwoMatchingCardsContinueToShow() {
+        List<Card> cards = Arrays.asList(new Card(Card.Type.BAT), new Card(Card.Type.BAT));
+        cards.get(0).setFlipped(true);
+        presenter.setFlippedCard(cards.get(0));
+        presenter.setCards(cards);
 
+        presenter.onCardClicked(1);
+
+        assertTrue(cards.get(0).isFlipped());
+        assertTrue(cards.get(1).isFlipped());
+        assertTrue(cards.get(0).isMatched());
+        assertTrue(cards.get(1).isMatched());
+        verify(view, times(1)).populateCardGrid(anyList(), anyInt());
     }
 
     @Test
     public void testTwoNonMatchingCardsContinueToShowForOneSecondBeforeBeingFlipped() {
+        List<Card> cards = Arrays.asList(new Card(Card.Type.HEN), new Card(Card.Type.BAT));
+        cards.get(0).setFlipped(true);
+        presenter.setFlippedCard(cards.get(0));
+        presenter.setCards(cards);
+        Timer timer = mock(Timer.class);
+        presenter.setTimer(timer);
 
+        presenter.onCardClicked(1);
+
+        assertTrue(cards.get(0).isFlipped());
+        assertTrue(cards.get(1).isFlipped());
+        assertFalse(cards.get(0).isMatched());
+        assertFalse(cards.get(1).isMatched());
+        verify(timer).schedule(any(TimerTask.class), eq(BoardPresenter.DELAY));
     }
 
     @Test
@@ -145,6 +195,18 @@ public class BoardPresenterTest {
         presenter.generateCards();
         List<Card> cards = presenter.getCards();
         cards.get(position).setFlipped(true);
+        presenter.setCards(cards);
+
+        presenter.onCardClicked(position);
+
+        verify(view, times(0)).populateCardGrid(anyList(), anyInt());
+    }
+
+    @Test
+    public void testCardsShouldNotBeActionableIfMatched() {
+        presenter.generateCards();
+        List<Card> cards = presenter.getCards();
+        cards.get(position).setMatched(true);
         presenter.setCards(cards);
 
         presenter.onCardClicked(position);
