@@ -35,26 +35,30 @@
         android:id="@+id/success_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:gravity="center"
         android:layout_gravity="center"
         android:background="@drawable/success_back"
-        android:padding="70dp"
+        android:paddingTop="@dimen/success_message_padding_vertical"
+        android:paddingBottom="@dimen/success_message_padding_vertical"
+        android:paddingLeft="@dimen/success_message_padding_horizontal"
+        android:paddingRight="@dimen/success_message_padding_horizontal"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/success_message_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="40sp"
+            android:textSize="@dimen/success_message_size"
             android:text="@string/success"/>
         <TextView
+            android:id="@+id/success_message_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
+            android:textSize="@dimen/success_message_subtitle_size"
             android:text="@string/success_subtitle"/>
 
     </LinearLayout>

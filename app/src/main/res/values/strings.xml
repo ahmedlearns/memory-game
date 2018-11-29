@@ -2,5 +2,5 @@
     <string name="app_name">Memory Game</string>
     <string name="title">Memory Game</string>
     <string name="success">You Win!</string>
-    <string name="success_subtitle">Go back to the main menu to try again!</string>
+    <string name="success_subtitle">Go back to the main menu\n to try again!</string>
 </resources>

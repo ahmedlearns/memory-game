@@ -2,9 +2,11 @@ package com.homer.ahmed.memorygame.board;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.homer.ahmed.memorygame.R;
 import com.homer.ahmed.memorygame.data.Card;
@@ -130,6 +133,11 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         cardsGrid.setAdapter(adapter);
 
         successMessage = findViewById(R.id.success_message);
+        Typeface font = ResourcesCompat.getFont(getApplicationContext(), R.font.digitalt);
+        TextView successMessageTitle = findViewById(R.id.success_message_title);
+        successMessageTitle.setTypeface(font);
+        TextView successMessageSubTitle = findViewById(R.id.success_message_subtitle);
+        successMessageSubTitle.setTypeface(font);
     }
 
     /**
