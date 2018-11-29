@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +16,14 @@ import com.homer.ahmed.memorygame.data.Card;
 import com.homer.ahmed.memorygame.data.GridOption;
 import com.homer.ahmed.memorygame.util.ImageAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardActivity extends AppCompatActivity implements BoardContract.View {
 
     private static final String TAG = BoardActivity.class.getSimpleName();
     private static final String OPTION = "gridOption";
+    private static final String CARDS = "cards";
 
     private BoardContract.Actions presenter;
 
@@ -40,8 +43,12 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        initializeToolbar();
         initializePresenter();
+        if (null != savedInstanceState && savedInstanceState.containsKey(CARDS)) {
+            presenter.restoreCardsState(savedInstanceState.getParcelableArrayList(CARDS));
+        }
+
+        initializeToolbar();
         initializeViews();
         loadGridOption();
     }
@@ -50,6 +57,13 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
     protected void onResume() {
         super.onResume();
         presenter.populateView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Save cards in case user rotates device
+        outState.putParcelableArrayList(CARDS, (ArrayList<? extends Parcelable>) presenter.saveCardsState());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

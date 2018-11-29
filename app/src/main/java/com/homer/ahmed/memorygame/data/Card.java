@@ -1,6 +1,9 @@
 package com.homer.ahmed.memorygame.data;
 
-public class Card {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Card implements Parcelable {
 
     public enum Type {
         COW, HEN, HORSE, PIG, BAT, CAT, GHOST_DOG, SPIDER;
@@ -41,4 +44,36 @@ public class Card {
     public boolean matches(Card card) {
         return type.equals(card.getType()) && flipped == card.isFlipped();
     }
+
+    //
+    // Parcelable methods
+    //
+
+    protected Card(Parcel in) {
+        matched = in.readByte() != 0;
+        flipped = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (matched ? 1 : 0));
+        dest.writeByte((byte) (flipped ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Card> CREATOR = new Creator<Card>() {
+        @Override
+        public Card createFromParcel(Parcel in) {
+            return new Card(in);
+        }
+
+        @Override
+        public Card[] newArray(int size) {
+            return new Card[size];
+        }
+    };
 }

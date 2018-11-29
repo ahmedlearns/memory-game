@@ -36,6 +36,10 @@ public interface BoardContract {
          * @param position Index of card the user has interacted with
          */
         void onCardClicked(int position);
+
+        List<Card> saveCardsState();
+
+        void restoreCardsState(List<Card> cards);
     }
 
     interface View {

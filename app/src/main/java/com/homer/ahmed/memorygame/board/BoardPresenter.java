@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,7 +38,8 @@ public class BoardPresenter implements BoardContract.Actions {
     @Override
     public void populateView() {
         if (!cards.isEmpty()) {
-            Log.d(TAG, "populateView: cards is already populated");
+            Log.d(TAG, "populateView: cards is already populated, not re-generating new cards");
+            view.populateCardGrid(cards, gridOption.getWidth());
             return;
         }
 
@@ -89,6 +91,24 @@ public class BoardPresenter implements BoardContract.Actions {
                     flippedCard = null;
                 }
             }, DELAY);
+        }
+    }
+
+    @Override
+    public List<Card> saveCardsState() {
+        return cards;
+    }
+
+    @Override
+    public void restoreCardsState(List<Card> cards) {
+        this.cards = cards;
+        // Restore flippedCard state
+        if (null == flippedCard) {
+            Optional<Card> optionalCard = this.cards
+                    .stream()
+                    .filter(card -> card.isFlipped() && !card.isMatched())
+                    .findFirst();
+            optionalCard.ifPresent(card -> flippedCard = card);
         }
     }
 

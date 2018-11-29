@@ -34,6 +34,10 @@ public class GridOption implements Parcelable {
                 + "width: " + width + "\n";
     }
 
+    //
+    // Parcelable methods
+    //
+
     protected GridOption(Parcel in) {
         name = in.readString();
         length = in.readInt();

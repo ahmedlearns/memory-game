@@ -38,7 +38,7 @@ public class OptionsAdapter extends ArrayAdapter<GridOption> {
         Button title = convertView.findViewById(R.id.option_title);
         addButtonEffect(title);
         title.setText(gridOption.getName());
-        Typeface font = ResourcesCompat.getFont(getContext(), R.font.sushi_omelette);
+        Typeface font = ResourcesCompat.getFont(getContext(), R.font.digitalt);
         title.setTypeface(font);
 
         // pass events to the parent

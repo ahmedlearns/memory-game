@@ -61,7 +61,7 @@ public class LobbyActivity extends AppCompatActivity {
      */
     private void initializeViews() {
         title = findViewById(R.id.title);
-        Typeface font = ResourcesCompat.getFont(getApplicationContext(), R.font.sushi_omelette);
+        Typeface font = ResourcesCompat.getFont(getApplicationContext(), R.font.digitalt);
         title.setTypeface(font);
         
         optionsListView = findViewById(R.id.options_list);
