@@ -76,8 +76,13 @@ public class BoardPresenter implements BoardContract.Actions {
             card.setMatched(true);
             flippedCard.setMatched(true);
             view.populateCardGrid(cards, gridOption.getWidth());
-
             flippedCard = null;
+
+            // check for win scenario
+            boolean containsUnmatchedCards = cards.stream().anyMatch(c -> !c.isMatched());
+            if (!containsUnmatchedCards) {
+                view.cardsAreMatched();
+            }
         } else {
             // If they do not match, wait 1 second before updating.
             view.populateCardGrid(cards, gridOption.getWidth());

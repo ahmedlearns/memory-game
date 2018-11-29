@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.homer.ahmed.memorygame.R;
 import com.homer.ahmed.memorygame.data.Card;
@@ -29,6 +31,7 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
 
     private GridView cardsGrid;
     private ImageAdapter adapter;
+    private LinearLayout successMessage;
 
     public static Intent createIntent(Context context, GridOption gridOption) {
         Intent intent = new Intent(context, BoardActivity.class);
@@ -82,6 +85,11 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
         }, 0);
     }
 
+    @Override
+    public void cardsAreMatched() {
+        successMessage.setVisibility(View.VISIBLE);
+    }
+
     //
     // Helper Methods
     //
@@ -120,6 +128,8 @@ public class BoardActivity extends AppCompatActivity implements BoardContract.Vi
 
         adapter = new ImageAdapter(getBaseContext());
         cardsGrid.setAdapter(adapter);
+
+        successMessage = findViewById(R.id.success_message);
     }
 
     /**

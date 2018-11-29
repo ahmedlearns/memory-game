@@ -68,5 +68,7 @@ public interface BoardContract {
          * @param cards List of cards with corresponding "flipped" and "matched" states
          */
         void updateAfterDelay(List<Card> cards);
+
+        void cardsAreMatched();
     }
 }
