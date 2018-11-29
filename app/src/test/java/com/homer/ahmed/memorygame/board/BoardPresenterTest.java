@@ -62,7 +62,8 @@ public class BoardPresenterTest {
 
         presenter.populateView();
 
-        verify(view, times(0)).populateCardGrid(anyList(), anyInt());
+        assertEquals(presenter.getCards().size(), cards.size());
+        verify(view, times(1)).populateCardGrid(anyList(), anyInt());
     }
 
     @Test
