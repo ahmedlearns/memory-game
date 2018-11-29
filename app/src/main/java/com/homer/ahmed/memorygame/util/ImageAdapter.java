@@ -100,8 +100,10 @@ public class ImageAdapter extends BaseAdapter {
     /**
      * Return drawable resource based on card type.
      *
-     * In the future, this and the Card Type model
-     * can be abstracted away behind an API in order to allow for additional card types.
+     * Possible feature:
+     *  - this and the Card Type model can be abstracted away behind an API
+     *      in order to allow for additional card types.
+     *  - Incorporate a sound with each animal to help with children learning?
      *
      * @param type Type of Card
      * @return Drawable resource identifier

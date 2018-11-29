@@ -10,6 +10,7 @@ public interface BoardContract {
     interface Actions {
         /**
          * Give the presenter a reference to its view
+         *
          * @param view View to be given to presenter
          */
         void setView(BoardContract.View view);
@@ -37,8 +38,18 @@ public interface BoardContract {
          */
         void onCardClicked(int position);
 
+        /**
+         * Save the state of cards if view needs to be redrawn
+         *
+         * @return List of Cards' state to save
+         */
         List<Card> saveCardsState();
 
+        /**
+         * Set the cards state after view is redrawn
+         *
+         * @param cards Current (saved) state of cards
+         */
         void restoreCardsState(List<Card> cards);
     }
 

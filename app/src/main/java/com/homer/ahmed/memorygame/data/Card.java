@@ -41,6 +41,15 @@ public class Card implements Parcelable {
         this.type = type;
     }
 
+    /**
+     * Check if two flipped cards match based on type.
+     *
+     * Can potentially be abstracted away from this class into presenter.
+     * Not using the equals() method since that is used to determine if two cards are the same card.
+     *
+     * @param card Card to compare to
+     * @return True if two cards match
+     */
     public boolean matches(Card card) {
         return type.equals(card.getType()) && flipped == card.isFlipped();
     }
