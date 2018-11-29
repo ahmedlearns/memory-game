@@ -69,6 +69,9 @@ public interface BoardContract {
          */
         void updateAfterDelay(List<Card> cards);
 
+        /**
+         * Method triggered in a game win scenario
+         */
         void cardsAreMatched();
     }
 }
